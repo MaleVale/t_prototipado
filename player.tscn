@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cp1p8hldtjxot"]
+[gd_scene load_steps=9 format=3 uid="uid://cp1p8hldtjxot"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_b3olj"]
 [ext_resource type="Texture2D" uid="uid://b2xvskb50p3u4" path="res://art/playerGrey_up1.png" id="1_ulewe"]
@@ -35,8 +35,10 @@ animations = [{
 radius = 28.0
 height = 72.0
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_bhd6g"]
+
 [node name="Player" type="Area2D"]
-position = Vector2(2, -2)
+position = Vector2(237, 191)
 script = ExtResource("1_b3olj")
 metadata/_edit_group_ = true
 
@@ -44,8 +46,25 @@ metadata/_edit_group_ = true
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_kwvkg")
 animation = &"up"
+autoplay = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_1d8uo")
+
+[node name="Mob" type="RigidBody2D" parent="."]
+collision_mask = 0
+gravity_scale = 0.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Mob"]
+sprite_frames = SubResource("SpriteFrames_bhd6g")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Mob/AnimatedSprite2D"]
+metadata/_edit_group_ = true
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Mob/AnimatedSprite2D/CollisionShape2D"]
+metadata/_edit_group_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
