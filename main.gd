@@ -6,20 +6,28 @@ var score
 func _ready():
 	new_game()
 
-# Se ejecuta cuando el jugador pierde
-func game_over():
-	$ScoreTimer.stop()
-	$MobTimer.stop()
-
 # Inicia una nueva partida
 func new_game():
 	score = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
+	$HUD.update_score(score)
+	$HUD.show_message("Get Ready")
+	get_tree().call_group("mobs", "queue_free")
+	$Music.play() # <<<<<< música
+
+# Se ejecuta cuando el jugador pierde
+func game_over():
+	$ScoreTimer.stop()
+	$MobTimer.stop()
+	$HUD.show_game_over()
+	$Music.stop()        # <<<<<< detener música
+	$DeathSound.play()   # <<<<<< sonido de muerte
 
 # Aumenta el puntaje cada segundo
 func _on_score_timer_timeout():
 	score += 1
+	$HUD.update_score(score) # Esto faltaba para mostrar el puntaje en pantalla
 
 # Inicia los temporizadores de enemigos y puntaje
 func _on_start_timer_timeout():
